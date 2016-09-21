@@ -6,6 +6,8 @@
 
 using namespace std;
 
+float r=1,h=1; // radius = r, height = **2h**
+
 float x_angle=0.0;
 float y_angle=0.0;
 float z_angle=0.0;
@@ -18,16 +20,16 @@ void populateVertices()
 {
 	for(int i=0; i<32; i++)
 	 {
-	 	top_circle[i][0] = cos(2*PI*i/32);
-	 	top_circle[i][1] = sin(2*PI*i/32);
-	 	top_circle[i][2] = 1.0;
+	 	top_circle[i][0] = r*cos(2*PI*i/32);
+	 	top_circle[i][1] = r*sin(2*PI*i/32);
+	 	top_circle[i][2] = h;
 	 }
 	 
 	for(int i=0; i<32; i++)
 	 {
-	 	bottom_circle[i][0] = cos(2*PI*i/32);
-	 	bottom_circle[i][1] = sin(2*PI*i/32);
-	 	bottom_circle[i][2] = -1.0;
+	 	bottom_circle[i][0] = r*cos(2*PI*i/32);
+	 	bottom_circle[i][1] = r*sin(2*PI*i/32);
+	 	bottom_circle[i][2] = -h;
 	 }
 }
 
@@ -95,52 +97,42 @@ void drawCylinder(void)
   
   //drawing top circle
   float center[3] = {0.0,0.0,1.0};
+  center[2] = h;
+  
+  glBegin(GL_TRIANGLES);
+  glColor3fv(color);
   
   for (int i=0;i<31;i++){
     
-    glBegin(GL_TRIANGLES);
-    glColor3fv(color);
     glVertex3fv(top_circle[i]);
     glVertex3fv(top_circle[i+1]);
     glVertex3fv(center);
-       
-    glEnd();
+    
   }
   
-  glBegin(GL_TRIANGLES);
-    glColor3fv(color);
     glVertex3fv(top_circle[31]);
     glVertex3fv(top_circle[0]);
     glVertex3fv(center);
-  glEnd();
   
   //drawing bottom circle
-  center[2] = -1.0;
+  center[2] = -h;
   
   for (int i=0;i<31;i++){
     
-    glBegin(GL_TRIANGLES);
-    glColor3fv(color);
     glVertex3fv(bottom_circle[i]);
     glVertex3fv(bottom_circle[i+1]);
     glVertex3fv(center);
-       
-    glEnd();
+    
   }
-  
-  glBegin(GL_TRIANGLES);
-    glColor3fv(color);
+ 
     glVertex3fv(bottom_circle[31]);
     glVertex3fv(bottom_circle[0]);
     glVertex3fv(center);
-  glEnd();
+  
   
   //drawing lateral surface
   for (int i=0;i<31;i++){
-    
-    glBegin(GL_TRIANGLES);
-    glColor3fv(color);
-    
+       
     glVertex3fv(top_circle[i]);
     glVertex3fv(top_circle[i+1]);
     glVertex3fv(bottom_circle[i]);
@@ -148,13 +140,9 @@ void drawCylinder(void)
     glVertex3fv(bottom_circle[i]);
     glVertex3fv(bottom_circle[i+1]);
     glVertex3fv(top_circle[i+1]);
-       
-    glEnd();
+      
   }
   
-  glBegin(GL_TRIANGLES);
-    glColor3fv(color);
-    
     glVertex3fv(top_circle[31]);
     glVertex3fv(top_circle[0]);
     glVertex3fv(bottom_circle[31]);
@@ -162,6 +150,7 @@ void drawCylinder(void)
     glVertex3fv(bottom_circle[31]);
     glVertex3fv(bottom_circle[0]);
     glVertex3fv(top_circle[0]);
+
   glEnd();
   
   glPopMatrix();
