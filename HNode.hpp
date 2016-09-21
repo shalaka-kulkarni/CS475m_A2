@@ -20,7 +20,7 @@ private:
   HNode* parent;
 
 public:
-  HNode (HNode* parent, int num_vertices, float pos_v4[][4],  float col_v4[][4]);
+  HNode (HNode* parent, int num_vertices, float pos_v4[][3],  float col_v4[][3]);
   void add_child(HNode*);
   void render();
   void change_parameters(float tx,float ty,float tz,float rx,float ry,float rz);
