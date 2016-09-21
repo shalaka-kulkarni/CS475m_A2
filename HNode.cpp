@@ -4,10 +4,9 @@ void vertexcopy(float *src,float *dest){
   dest[0]=src[0];
   dest[1]=src[1];
   dest[2]=src[2];
-  dest[3]=src[3];
 }
 
-HNode::HNode(HNode* par, int num_v, float pos_v4[][4],  float col_v4[][4]){
+HNode::HNode(HNode* par, int num_v, float pos_v4[][3],  float col_v4[][3]){
   if(par!=NULL){
     parent=par;
     parent->add_child(this);
@@ -16,10 +15,10 @@ HNode::HNode(HNode* par, int num_v, float pos_v4[][4],  float col_v4[][4]){
   vertex_pos = new float*[num_vertices];
   vertex_col = new float*[num_vertices];
   for(int i=0;i<num_v;i++){
-    vertex_pos[i]=new(float[4]);
+    vertex_pos[i]=new(float[3]);
     vertexcopy(pos_v4[i],vertex_pos[i]);
 
-    vertex_col[i]=new(float[4]);
+    vertex_col[i]=new(float[3]);
     vertexcopy(col_v4[i],vertex_col[i]);
   }
   tx=ty=tz=rx=ry=rz=0;
