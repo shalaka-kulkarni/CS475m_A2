@@ -1,13 +1,13 @@
 CC = g++
 LIBS = -lGL -lglut -lGLU -lm 
 
-SRC = cuboid.cpp
-BIN = cuboid
+SRC = frame_revised.cpp
+BIN = frame
 
 all	:	$(BIN)
 
 $(BIN)	:	$(SRC)
-	$(CC) $(SRC) -g -o $(BIN) $(LIBS) 
+	$(CC) $(SRC) -o $(BIN) $(LIBS)
 
 clean	:
-	rm -f $(BIN) *~ *.aux *.log
+	rm -f $(BIN) *~
