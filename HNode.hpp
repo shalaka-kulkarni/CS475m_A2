@@ -7,6 +7,7 @@
 
 void vertexcopy(float *src,float *dest);
 
+
 // A simple class that represents a node in the hierarchy tree
 class HNode {
 private:
@@ -23,6 +24,7 @@ public:
   HNode (HNode* parent, int num_vertices, float pos_v4[][3],  float col_v4[][3]);
   void add_child(HNode*);
   void render();
+  void renderTorus();
   void change_parameters(float tx,float ty,float tz,float rx,float ry,float rz);
   void render_tree();
   void inc_rx();

@@ -1,5 +1,7 @@
 #include "HNode.hpp"
 
+float shift = 0.5;
+
 void vertexcopy(float *src,float *dest){
   dest[0]=src[0];
   dest[1]=src[1];
@@ -28,6 +30,17 @@ void HNode::add_child(HNode *child){
   children.push_back(child);
 }
 
+void HNode::renderTorus()
+{
+  glTranslatef(tx,ty,tz);
+  //Rotate at translated origin
+  glRotatef(rx, 1.0, 0.0, 0.0);
+  glRotatef(ry, 0.0, 1.0, 0.0);
+  glRotatef(rz, 0.0, 0.0, 1.0);
+  glColor3fv(vertex_col[0]);
+  glutSolidTorus(vertex_pos[0][0]-vertex_pos[0][1], vertex_pos[0][0],50,50);
+}
+
 void HNode::render(){
   //Translate the origin
   glTranslatef(tx,ty,tz);
@@ -35,13 +48,21 @@ void HNode::render(){
   glRotatef(rx, 1.0, 0.0, 0.0);
   glRotatef(ry, 0.0, 1.0, 0.0);
   glRotatef(rz, 0.0, 0.0, 1.0);
-
-  glBegin(GL_TRIANGLES);
-  for (int i=0;i<num_vertices;i++){
-    glColor3fv(vertex_col[i]);
-    glVertex3fv(vertex_pos[i]);
+  /*if(flag = -999)   //render torus
+  {
+    //Convention: for a torus, the v.list is of length 1. vertex_pos[0] = {r_out, r_in, flag} and vertex_col[0] has the colour
+    glColor3fv(vertex_col[0]);
+    renderTorus(vertex_pos[0][0], vertex_pos[0][1]);
   }
-  glEnd();
+  else   //vertexlist available
+  {*/
+    glBegin(GL_TRIANGLES);
+    for (int i=0;i<num_vertices;i++){
+      glColor3fv(vertex_col[i]);
+      glVertex3fv(vertex_pos[i]);
+    }
+    glEnd();
+  //}
 }
 
 void HNode::change_parameters(float tx,float ty,float tz,float rx,float ry,float rz){
@@ -55,7 +76,9 @@ void HNode::change_parameters(float tx,float ty,float tz,float rx,float ry,float
 
 void HNode::render_tree(){
   glPushMatrix();
-  render();
+  
+    render();
+
   for(int i=0;i<children.size();i++){
     children[i]->render_tree();
   }
@@ -64,32 +87,32 @@ void HNode::render_tree(){
 
 
 void HNode::inc_rx(){
-  rx++;
+  rx+=shift;
   if(rx>360)
   rx-=360;
 }
 void HNode::inc_ry(){
-  ry++;
+  ry+=shift;
   if(ry>360)
   ry-=360;
 }
 void HNode::inc_rz(){
-  rz++;
+  rz+=shift;
   if(rz>360)
   rz-=360;
 }
 void HNode::dec_rx(){
-  rx--;
+  rx-=shift;
   if(rx<0)
   rx+=360;
 }
 void HNode::dec_ry(){
-  ry--;
+  ry-=shift;
   if(ry<0)
   ry+=360;
 }
 void HNode::dec_rz(){
-  rz--;
+  rz-=shift;
   if(rz<0)
   rz+=360;
 }
