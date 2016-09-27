@@ -36,8 +36,10 @@ float seat_color[24][3] = {
   {0.3,0.3,0.3}, {0.3,0.3,0.3}, {0.3,0.3,0.3}
 };
 
+//pedal dimensions
 float l=0.75, b=0.5, h=0.2; // cuboid is 2l along x, 2b along y, 2h along z 
 
+//pedal vertices
 float cuboid_positions[36][3] = {
   {-l,b,h},  {-l,-b,h},  {l,-b,h},
   {-l,b,h},  {l,-b,h},  {l,b,h},
@@ -53,6 +55,7 @@ float cuboid_positions[36][3] = {
   {-l,b,-h},  {-l,-b,h},  {-l,b,h}
 };
 
+//pedal colors
 float cuboid_colors[36][3] = {
   {0.3,0.3,0.3}, {0.3,0.3,0.3}, {0.3,0.3,0.3},
    {0.3,0.3,0.3}, {0.3,0.3,0.3}, {0.3,0.3,0.3},
@@ -164,29 +167,36 @@ void processNormalKeys(unsigned char key, int x, int y) {
 //Our function for processing Non-ASCII keys
 void processSpecialKeys(int key, int x, int y) {
   switch(key) {
-    case GLUT_KEY_LEFT :
+    //Front wheel and handlebar lateral movement Node 12: front handlebar root node
+    case GLUT_KEY_LEFT : 
     if(!(node[12]->rz>45 && node[12]->rz<315))
-    node[12]->dec_rz();
+      node[12]->dec_rz();
     else
-    node[12]->inc_rz();  
+      node[12]->inc_rz();  
     break;
-    case GLUT_KEY_RIGHT :
+    
+    case GLUT_KEY_RIGHT : 
     if(!(node[12]->rz>45 && node[12]->rz<315))
-    node[12]->inc_rz();
+      node[12]->inc_rz();
     else
-    node[12]->dec_rz();
+      node[12]->dec_rz();
     break;
-    case GLUT_KEY_UP :
+    
+    //Pedal and wheel rotation Node 7: Pedal axle, Node 21: Front wheel axle, Node 29: Back wheel axle
+    case GLUT_KEY_UP : 
     node[7]->dec_rz();
     node[21]->dec_rz();
     node[29]->dec_rz();
     break;
+
     case GLUT_KEY_DOWN :
     node[7]->inc_rz();
     node[29]->inc_rz();
     node[21]->inc_rz();
     break;
-    case GLUT_KEY_PAGE_UP :
+
+    //Main frame rotation for changing view
+    case GLUT_KEY_PAGE_UP : 
     node[0]->dec_rz();
     break;
     case GLUT_KEY_PAGE_DOWN :
@@ -223,15 +233,17 @@ void init(void)
 
 int main(int argc, char **argv)
 {
-  //Frame vertical rod
+  //Root node Frame vertical rod
   populateCylinderVertices(0.25,4.0,1.0,0.0,0.0);
   node[0] = new HNode(NULL,384,cylinder_vertices,cylinder_colors);
   node[0]->change_parameters(0.0,0.0,0.0,90.0,-5.0,0.0);
 
+  //Seat support rod
   populateCylinderVertices(0.25,0.8,0.5,0.5,0.5);
   node[1] = new HNode(node[0],384,cylinder_vertices,cylinder_colors);
   node[1]->change_parameters(0.0,0.0,-2.4,0.0,0.0,0.0);
 
+  //Frame rods
   populateCylinderVertices(0.25,5.0,1.0,0.0,0.0);
   node[2] = new HNode(node[0],384,cylinder_vertices,cylinder_colors);
   node[2]->change_parameters(-2.3,0.0,-1.5,0.0,90.0,0.0);
@@ -248,6 +260,7 @@ int main(int argc, char **argv)
   node[5] = new HNode(node[0],384,cylinder_vertices,cylinder_colors);
   node[5]->change_parameters(2.4,0.0,1.4,0.0,100.0,0.0);
 
+  //Seat
   node[6] = new HNode(node[0],24,seat_vertices, seat_color);
   node[6]->change_parameters(0.0,0.0,-2.8,0.0,0.0,0.0);
 
@@ -305,6 +318,7 @@ int main(int argc, char **argv)
   node[18] = new HNode(node[12],384,cylinder_vertices,cylinder_colors);
   node[18]->change_parameters(0.0,0.0,1.1,90.0,0.0,0.0);
 
+  //Vertical wheel supports
   populateCylinderVertices(0.2,2.6,1.0,0.0,0.0);
   node[19] = new HNode(node[18],384,cylinder_vertices,cylinder_colors);
   node[19]->change_parameters(0.0,(-0.2+1.3),0.37,90.0,0.0,0.0);
@@ -349,7 +363,7 @@ int main(int argc, char **argv)
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
   glutInitWindowSize(600,600);
-  glutCreateWindow("Color Cube Rotate");
+  glutCreateWindow("My Bicycle");
   glutDisplayFunc(display);
 
   glutKeyboardFunc(processNormalKeys);
